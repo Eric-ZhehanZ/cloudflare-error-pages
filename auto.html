@@ -267,11 +267,27 @@
         });
     }
 
-    function isActivated(shell, placeholder) {
+    function isPlaceholderText(value) {
+        return /^::[A-Z0-9_]+::$/.test(value);
+    }
+
+    function isActivated(shell) {
         if (!shell) {
             return false;
         }
-        return !shell.innerHTML.includes(placeholder);
+
+        const text = shell.textContent.trim();
+        const hasElementChildren = shell.querySelector('*') !== null;
+
+        if (hasElementChildren) {
+            return true;
+        }
+
+        if (!text) {
+            return false;
+        }
+
+        return !isPlaceholderText(text);
     }
 
     function stopAttackCountdown() {
@@ -310,8 +326,8 @@
     }
 
     function updateMode() {
-        const captchaActive = isActivated(captchaShell, '::CAPTCHA_BOX::');
-        const attackActive = isActivated(attackShell, '::IM_UNDER_ATTACK_BOX::');
+        const captchaActive = isActivated(captchaShell);
+        const attackActive = isActivated(attackShell);
 
         if (captchaActive) {
             setMode('captcha');
