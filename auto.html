@@ -85,8 +85,7 @@
             margin: 0;
         }
 
-        .status,
-        .timer {
+        .status {
             font-size: 1em;
             color: #777;
             margin: 8px 0 20px;
@@ -155,7 +154,7 @@
             .warning-sign::before,
             .error-sign::before { color: #e0e0e0; }
             .spinner { border: 4px solid #444; border-top: 4px solid #e0e0e0; }
-            .status, .timer, .protection, .info-text { color: #aaa; }
+            .status, .protection, .info-text { color: #aaa; }
             .more-info a { color: #aaa; }
         }
     </style>
@@ -179,7 +178,6 @@
         <div class="spinner"></div>
         <p class="large" id="attack-main-text"></p>
         <p class="status" id="attack-status-text"></p>
-        <p class="timer" id="attack-timer-text"></p>
         <div class="cloudflare-box" id="attack-box-shell">::IM_UNDER_ATTACK_BOX::</div>
         <p class="protection" id="attack-protection-text"></p>
         <div class="more-info">
@@ -200,23 +198,22 @@
                 hide: 'Hide details',
                 details: [
                     '::RAY_ID::',
-                    '::CLIENT_IP:: ::GEO:: A-INT',
+                    '::CLIENT_IP:: ::GEO:: AUTO-INT',
                     'You need to undergo validation due to unusual traffic from your network or a strengthened security posture.'
                 ]
             },
             attack: {
-                main: 'A moment please',
-                status1: 'Checking your network...',
-                status2: 'Check complete. Proceeding...',
+                main: 'One Moment Please',
+                status1: 'Checking your device and network',
+                status2: 'Check complete — Proceeding',
                 protection: 'ZhehanZ Edge Protection',
                 show: 'Show details',
                 hide: 'Hide details',
                 details: [
                     '::RAY_ID::',
-                    '::CLIENT_IP:: ::GEO:: A-NON',
+                    '::CLIENT_IP:: ::GEO:: AUTO-NON',
                     'You need to undergo validation due to unusual traffic from your network or a strengthened security posture.'
-                ],
-                timer: 'Refreshing in {seconds} seconds'
+                ]
             }
         },
         zh: {
@@ -228,23 +225,22 @@
                 hide: '隐藏更多信息',
                 details: [
                     '::RAY_ID::',
-                    '::CLIENT_IP:: ::GEO:: 403 A-INT',
+                    '::CLIENT_IP:: ::GEO:: 403 AUTO-INT',
                     '您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。'
                 ]
             },
             attack: {
-                main: '请稍作等候',
-                status1: '正在检查网络',
-                status2: '检查完成，即将继续访问',
+                main: '请等候验证',
+                status1: '正在自动检查设备及网络',
+                status2: '检查完成 — 即将继续访问',
                 protection: 'ZhehanZ Edge 守护服务',
                 show: '查看更多信息',
                 hide: '隐藏更多信息',
                 details: [
                     '::RAY_ID::',
-                    '::CLIENT_IP:: ::GEO:: 403 A-NON',
+                    '::CLIENT_IP:: ::GEO:: 403 AUTO-NON',
                     '您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。'
-                ],
-                timer: '{seconds} 秒后刷新'
+                ]
             }
         }
     };
@@ -271,10 +267,6 @@
         });
     }
 
-    function fillTemplate(template, seconds) {
-        return template.replace('{seconds}', String(seconds));
-    }
-
     function isActivated(shell, placeholder) {
         if (!shell) {
             return false;
@@ -295,22 +287,6 @@
 
     function startAttackCountdown() {
         stopAttackCountdown();
-
-        const t = texts[lang].attack;
-        const timerEl = document.getElementById('attack-timer-text');
-        let remaining = refreshSeconds;
-
-        timerEl.textContent = fillTemplate(t.timer, remaining);
-        state.countdownId = window.setInterval(() => {
-            remaining -= 1;
-            if (remaining <= 0) {
-                timerEl.textContent = fillTemplate(t.timer, 0);
-                stopAttackCountdown();
-                window.location.reload();
-                return;
-            }
-            timerEl.textContent = fillTemplate(t.timer, remaining);
-        }, 1000);
 
         state.refreshId = window.setTimeout(() => {
             window.location.reload();
