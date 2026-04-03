@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ZhehanZ Protection</title>
+    <title>ZhehanZ Edge Error</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -29,7 +29,7 @@
             margin-bottom: 20px;
         }
         .error-sign::before {
-            content: "×";
+            content: "!";
             color: #333;
             font-size: 35px;
             font-weight: bold;
@@ -102,27 +102,27 @@
     const isZh = navigator.language.startsWith('zh');
     const texts = {
         en: {
-            main: '429 Rate Limited',
-            status: 'You have made too many requests in a short time',
-            protection: 'ZhehanZ protected by Cloudflare',
+            main: 'Rate Limited',
+            status: 'Slow down — You have been rate limited',
+            protection: 'ZhehanZ Edge Protection',
             show: 'Show details',
             hide: 'Hide details',
             details: [
                 '::RAY_ID::',
                 '::CLIENT_IP:: ::GEO::',
-                'This page appears due to security measures that prevent you from accessing.'
+                'Your connection is fine. The service has limited the rate of requests from your IP address based on security rules to protect the service from potential abuse.'
             ]
         },
         zh: {
-            main: '429 速率限制',
-            status: '您的访问速率过快且已被限制继续访问',
-            protection: 'ZhehanZ 由 Cloudflare 提供防护',
+            main: '速率限制',
+            status: '请放慢速度 — 您已被限制请求',
+            protection: 'ZhehanZ Edge 防护',
             show: '查看更多信息',
             hide: '隐藏更多信息',
             details: [
                 '::RAY_ID::',
                 '::CLIENT_IP:: ::GEO::',
-                '此页面因阻止您访问的安全防护措施而显示。'
+                '您的网络连接正常。该服务根据安全规则限制了您 IP 地址的请求速率，以保护服务免受潜在滥用。'
             ]
         }
     };

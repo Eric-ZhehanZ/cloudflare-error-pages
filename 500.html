@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ZhehanZ Error 5XX</title>
+    <title>ZhehanZ Edge Error</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -29,7 +29,7 @@
             margin-bottom: 20px;
         }
         .error-sign::before {
-            content: "×";
+            content: "!";
             color: #333;
             font-size: 35px;
             font-weight: bold;
@@ -103,27 +103,27 @@
     const isZh = navigator.language.startsWith('zh');
     const texts = {
         en: {
-            main: 'Error 5XX',
-            status: 'The origin server could not be reached - Please refresh',
-            protection: 'ZhehanZ protected by Cloudflare',
+            main: 'Service Unavailable',
+            status: 'You are connected, but the server is currently unavailable',
+            protection: 'ZhehanZ Edge Protection',
             show: 'Show details',
             hide: 'Hide details',
             details: [
                 '::RAY_ID::',
                 '::CLIENT_IP:: ::GEO::',
-                'Your connection is fine. This page appears due to connection issues between intermediate servers and the origin server. Please refresh - this issue will most likely resolve itself.'
+                'Your connection is fine. The service is either temporarily down for maintainence purposes, or experiencing some connection issues between entry nodes and the origin. This issue will most likely resolve itself soon.'
             ]
         },
         zh: {
-            main: '5XX 错误',
-            status: '原始服务器当前无法访问 - 请刷新再试',
-            protection: 'ZhehanZ 由 Cloudflare 提供防护',
+            main: '服务暂不可用',
+            status: '您已连接，但原始服务器当前无法访问',
+            protection: 'ZhehanZ Edge 守护服务',
             show: '查看更多信息',
             hide: '隐藏更多信息',
             details: [
                 '::RAY_ID::',
                 '::CLIENT_IP:: ::GEO::',
-                '您的网络连接正常。此页面因中继服务器无法访问到原始服务器而显示。请尝试刷新，一般该问题会很快自行修复。'
+                '您的网络连接正常。此服务可能正暂时停机维护中，或在入口端点与源服务器之间出现连接问题。该问题一般会很快自行修复。'
             ]
         }
     };

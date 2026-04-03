@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ZhehanZ Protection</title>
+    <title>ZhehanZ Edge Validation</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -118,27 +118,27 @@
     const lang = navigator.language.startsWith('zh') ? 'zh' : 'en';
     const texts = {
         en: {
-            main: 'Complete verification',
+            main: 'Validation Required',
             status: 'Pass the turnstile to continue access',
             show: 'Show details',
             hide: 'Hide details',
-            protection: 'ZhehanZ protected by Cloudflare',
+            protection: 'ZhehanZ Edge Protection',
             details: [
                 '::RAY_ID::',
                 '::CLIENT_IP:: ::GEO::',
-                'This page appears due to unusual activity or enhanced security measures.'
+                'You need to undergo validation due to unusual traffic from your network or a strengthened security posture.'
             ]
         },
         zh: {
-            main: '请完成验证',
-            status: '完成以下人机验证以继续访问',
+            main: '需要完成验证',
+            status: '通过以下验证以继续访问',
             show: '查看更多信息',
             hide: '隐藏更多信息',
-            protection: 'ZhehanZ 由 Cloudflare 提供防护',
+            protection: 'ZhehanZ Edge 守护服务',
             details: [
                 '::RAY_ID::',
                 '::CLIENT_IP:: ::GEO::',
-                '此页面因异常网络活动或强化的安全防护而显示。'
+                '您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。'
             ]
         }
     };
