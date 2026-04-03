@@ -102,27 +102,27 @@
     const isZh = navigator.language.startsWith('zh');
     const texts = {
         en: {
-            main: 'IP Blocked',
-            status: 'Your IP address is blocked from this service',
+            main: 'Rate Limited',
+            status: 'Slow down — You have been rate limited',
             protection: 'ZhehanZ Edge Protection',
             show: 'Show details',
             hide: 'Hide details',
             details: [
                 '::RAY_ID::',
                 '::CLIENT_IP:: ::GEO::',
-                'Your connection is fine. The service denied you access based on security rules that disallow users from certain regions or IP ranges.'
+                'Your connection is fine. The service has limited the rate of requests from your IP address based on security rules to protect the service from potential abuse.'
             ]
         },
         zh: {
-            main: 'IP 地址被阻止',
-            status: '您的 IP 地址无法访问本服务',
+            main: '速率限制',
+            status: '请放慢速度 — 您已被限制请求',
             protection: 'ZhehanZ Edge 守护服务',
             show: '查看更多信息',
             hide: '隐藏更多信息',
             details: [
                 '::RAY_ID::',
                 '::CLIENT_IP:: ::GEO::',
-                '您的网络连接正常。基于安全规则，此服务仅限来自特定地区或 IP 范围的用户访问，因此您的请求被拒绝。'
+                '您的网络连接正常。该服务根据安全规则限制了您 IP 地址的请求速率，以保护服务免受潜在滥用。'
             ]
         }
     };

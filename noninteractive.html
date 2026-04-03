@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="refresh" content="12">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ZhehanZ Edge Error</title>
+    <title>ZhehanZ Edge Validation</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -14,46 +15,40 @@
             align-items: center;
             flex-direction: column;
             text-align: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
             padding: 20px;
             background-color: #fff;
             color: #333;
         }
-        .error-sign {
-            border: 4px solid #333;
+        .spinner {
+            border: 4px solid #ddd;
+            border-top: 4px solid #333;
             border-radius: 50%;
             width: 40px;
             height: 40px;
-            position: relative;
+            animation: spin 1s linear infinite;
             margin-bottom: 20px;
         }
-        .error-sign::before {
-            content: "!";
-            color: #333;
-            font-size: 35px;
-            font-weight: bold;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         .large {
             font-size: 1.8em;
             font-weight: bold;
-            margin: 0 0 10px;
+            margin: 0;
         }
         .status {
             font-size: 1em;
             color: #777;
-            margin: 0 0 20px;
+            margin: 8px 0 20px;
         }
         .protection {
             font-size: 0.8em;
             color: #777;
-            margin: 20px 0 5px;
+            margin-top: 20px;
+            margin-bottom: 5px;
         }
         .more-info {
+            margin-top: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -69,7 +64,8 @@
             font-size: 0.8em;
             color: #777;
             text-align: center;
-            max-width: 80%;
+            display: inline-block;
+            max-width: 55%;
             overflow: hidden;
             max-height: 0;
             opacity: 0;
@@ -82,15 +78,14 @@
         .info-text p { margin: 4px 0; }
         @media (prefers-color-scheme: dark) {
             body { background: #121212; color: #e0e0e0; }
-            .error-sign { border-color: #e0e0e0; }
-            .error-sign::before { color: #e0e0e0; }
+            .spinner { border: 4px solid #444; border-top: 4px solid #e0e0e0; }
             .status, .protection, .info-text { color: #aaa; }
             .more-info a { color: #aaa; }
         }
     </style>
 </head>
 <body>
-    <div class="error-sign"></div>
+    <div class="spinner"></div>
     <p class="large" id="main-text"></p>
     <p class="status" id="status-text"></p>
     <p class="protection" id="protection-text"></p>
@@ -99,45 +94,42 @@
         <div class="info-text" id="info-text"></div>
     </div>
 <script>
-    const isZh = navigator.language.startsWith('zh');
+    const lang = navigator.language.startsWith('zh') ? 'zh' : 'en';
     const texts = {
         en: {
-            main: 'Rate Limited',
-            status: 'Slow down — You have been rate limited',
+            main: 'A moment please',
+            status1: 'Checking your network...',
+            status2: 'Check complete. Proceeding...',
             protection: 'ZhehanZ Edge Protection',
             show: 'Show details',
             hide: 'Hide details',
-            details: [
-                '::RAY_ID::',
-                '::CLIENT_IP:: ::GEO::',
-                'Your connection is fine. The service has limited the rate of requests from your IP address based on security rules to protect the service from potential abuse.'
-            ]
+            details: ['::RAY_ID::', '::CLIENT_IP:: ::GEO::', 'You need to undergo validation due to unusual traffic from your network or a strengthened security posture.']
         },
         zh: {
-            main: '速率限制',
-            status: '请放慢速度 — 您已被限制请求',
-            protection: 'ZhehanZ Edge 防护',
+            main: '请稍作等候',
+            status1: '正在检查网络',
+            status2: '检查完成，即将继续访问',
+            protection: 'ZhehanZ Edge 守护服务',
             show: '查看更多信息',
             hide: '隐藏更多信息',
-            details: [
-                '::RAY_ID::',
-                '::CLIENT_IP:: ::GEO::',
-                '您的网络连接正常。该服务根据安全规则限制了您 IP 地址的请求速率，以保护服务免受潜在滥用。'
-            ]
+            details: ['::RAY_ID::', '::CLIENT_IP:: ::GEO::', '您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。']
         }
     };
-    const t = isZh ? texts.zh : texts.en;
+    const t = texts[lang];
     document.getElementById('main-text').textContent = t.main;
-    document.getElementById('status-text').textContent = t.status;
+    const statusEl = document.getElementById('status-text'); statusEl.textContent = t.status1;
     document.getElementById('protection-text').textContent = t.protection;
     const toggle = document.getElementById('toggle-info');
     const info = document.getElementById('info-text');
     toggle.textContent = t.show;
     toggle.addEventListener('click', () => {
-        const open = info.classList.toggle('open');
-        toggle.textContent = open ? t.hide : t.show;
-        if (open) info.innerHTML = t.details.map(line => `<p>${line}</p>`).join('');
+        const isOpen = info.classList.toggle('open');
+        toggle.textContent = isOpen ? t.hide : t.show;
+        if (isOpen) {
+            info.innerHTML = t.details.map(line => `<p>${line}</p>`).join('');
+        }
     });
+    setTimeout(() => { statusEl.textContent = t.status2; }, 5000);
 </script>
 </body>
 </html>
