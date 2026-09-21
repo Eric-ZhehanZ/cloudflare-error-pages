@@ -268,6 +268,24 @@
     document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : 'en';
     const appearance = readCookie('siteAppearance');
     if (appearance === 'dark' || appearance === 'light') document.documentElement.dataset.theme = appearance;
+
+    // Pin the page title. Cloudflare's challenge script (and anything else that
+    // loads later) is not allowed to change it, e.g. to "Just a moment...".
+    function lockTitle(value) {
+        const head = document.head;
+        let titleEl = head.querySelector('title');
+        if (!titleEl) titleEl = head.appendChild(document.createElement('title'));
+        const enforce = () => {
+            head.querySelectorAll('title').forEach(el => { if (el !== titleEl) el.remove(); });
+            if (titleEl.textContent !== value) titleEl.textContent = value;
+        };
+        enforce();
+        try {
+            Object.defineProperty(document, 'title', { configurable: true, get: () => value, set: enforce });
+        } catch (_) {}
+        new MutationObserver(enforce).observe(titleEl, { childList: true, characterData: true, subtree: true });
+        new MutationObserver(enforce).observe(head, { childList: true });
+    }
     const texts = {
         en: {
             title: "Error • ZhehanZ Edge",
@@ -314,7 +332,7 @@
         toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); render(); } });
     }
     const t = texts[lang];
-    document.title = t.title;
+    lockTitle(t.title);
     document.getElementById('main-text').textContent = t.main;
     document.getElementById('status-text').textContent = t.status;
     document.getElementById('protection-text').textContent = t.protection;
