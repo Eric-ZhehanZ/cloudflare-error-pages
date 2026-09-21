@@ -1,0 +1,21 @@
+services:
+  edge-origin-tester:
+    build: .
+    image: edge-origin-tester
+    restart: unless-stopped
+    ports:
+      - "8080:8080"   # main origin, HTTP
+      - "8443:8443"   # main origin, HTTPS (self-signed unless CERT_FILE and KEY_FILE are set)
+      - "8520:8520"   # non-HTTP bytes, expect 520
+      - "8522:8522"   # accepts and never answers
+      - "8525:8525"   # plain HTTP, reach it over TLS for 525
+      - "8526:8526"   # HTTPS, self-signed certificate, expect 526 under Full (strict)
+      - "8527:8527"   # HTTPS, expired certificate, expect 526 under Full (strict)
+    environment:
+      ORIGIN_HOSTNAME: origin-test.zheha.nz
+      # To serve a certificate the edge trusts on 8443 (for example a Cloudflare
+      # Origin CA certificate), mount it and point at it:
+      # CERT_FILE: /certs/origin.pem
+      # KEY_FILE: /certs/origin.key
+    # volumes:
+    #   - ./certs:/certs:ro
