@@ -285,7 +285,7 @@
                 "Your connection is fine. The site is either down for maintenance, or a configuration problem on the site is stopping the edge network from serving it. This usually resolves itself soon."
             ],
             sep: " ",
-            action: "Reload the page in a minute. If it keeps happening, the site owner needs to correct the configuration; quote the Ray ID above when reporting it.",
+            action: "Reload the page in a minute. If it keeps happening, we need to correct the configuration; quote the ID above when reporting it.",
             byStatus: {
                 403: {
                     status: "Access to this site is denied by its configuration",
@@ -305,11 +305,11 @@
                 },
                 502: {
                     status: "The site points to an address it cannot use",
-                    detail: "Your connection is fine. The site’s DNS is set to an address that the edge network is not allowed to serve, which the site owner needs to correct."
+                    detail: "Your connection is fine. The site’s DNS is set to an address that the edge network is not allowed to serve, which we need to correct."
                 },
                 530: {
                     status: "The server address could not be resolved",
-                    detail: "Your connection is fine. The edge network could not find the origin server: its DNS record does not resolve, or its tunnel is not connected."
+                    detail: "Your connection is fine. The edge network could not find the origin server because its DNS record does not resolve or its tunnel is not connected."
                 }
             }
         },
@@ -326,7 +326,7 @@
                 "您的网络连接正常。此站点可能正在停机维护，或站点的配置问题导致边缘网络无法提供服务。该问题通常会很快自行恢复。"
             ],
             sep: "",
-            action: "请稍候一分钟后刷新页面。如果问题持续出现，需要由站点所有者修正配置；反馈时请附上上方的 Ray ID。",
+            action: "请稍候一分钟后刷新页面。如果问题持续出现，需要我们修正配置；反馈时请附上上方的 ID。",
             byStatus: {
                 403: {
                     status: "站点的配置拒绝了此次访问",
@@ -346,11 +346,11 @@
                 },
                 502: {
                     status: "站点指向了一个无法使用的地址",
-                    detail: "您的网络连接正常。站点的 DNS 指向了边缘网络不允许提供服务的地址，需要由站点所有者修正。"
+                    detail: "您的网络连接正常。站点的 DNS 指向了边缘网络不允许提供服务的地址，需要我们修正。"
                 },
                 530: {
                     status: "无法解析服务器地址",
-                    detail: "您的网络连接正常。边缘网络找不到源服务器：其 DNS 记录无法解析，或其隧道未连接。"
+                    detail: "您的网络连接正常。边缘网络找不到源服务器，其 DNS 记录无法解析，或其隧道未连接。"
                 }
             }
         }

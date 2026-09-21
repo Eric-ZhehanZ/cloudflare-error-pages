@@ -1,0 +1,16 @@
+{
+  // Deploy with: npx wrangler deploy (from this folder, after `npx wrangler login`).
+  // Attach it to a hostname on the zone that serves the custom pages, so the
+  // errors it provokes are answered with those pages.
+  "name": "edge-error-tester",
+  "main": "worker.js",
+  "compatibility_date": "2025-09-01",
+  "routes": [
+    { "pattern": "test.zheha.nz/*", "zone_name": "zheha.nz" }
+  ],
+  "vars": {
+    // Set this if the Worker is mounted under a sub-path instead of a hostname,
+    // for example "/_edge-test" with a route of zheha.nz/_edge-test/*.
+    "PATH_PREFIX": ""
+  }
+}
