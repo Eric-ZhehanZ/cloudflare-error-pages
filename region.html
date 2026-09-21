@@ -112,61 +112,44 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: calc(var(--content-width) / 2);
+            max-width: var(--content-width);
             margin: 1.75rem auto 0.25rem;
         }
-        /* Flex centering keeps the widget centred even when it is wider than
-         * the container: the overflow splits evenly on both sides instead of
-         * spilling to the right as inline content would. */
+        /* A permanent rounded box, sized for the 300 x 65 Turnstile widget plus
+         * a 12px margin all round. The widget renders inside it; when Cloudflare
+         * swaps the widget for its "waiting for <site> to respond" text, the
+         * text takes the same box. Fixed size, so the layout never shifts. */
         .captcha-container form {
+            flex: none;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            min-height: 65px; /* widget height, reserved before it loads */
+            width: 324px;
+            max-width: 100%;
+            height: 89px;
             margin: 0;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 0.5rem;
             text-align: center;
         }
         .captcha-container form,
         .captcha-container form * {
             font-family: var(--font) !important;
             color: var(--fg) !important;
-            font-size: 1rem;
-            line-height: 1.35;
+            font-size: 0.9375rem;
+            line-height: 1.3;
+            vertical-align: top; /* no descender gap under Cloudflare's inline-block wrapper */
         }
         .captcha-container form > * {
             flex: none;
             width: max-content;
-            max-width: none;
+            max-width: 100%;
             margin: 0;
         }
         .captcha-container form iframe {
             display: block;
-            max-width: none;
-        }
-        /* Once Cloudflare swaps the widget for its "waiting for <site> to
-         * respond" text, the form becomes a box of the widget's exact size
-         * (300 x 65) so the text sits where the widget was. */
-        .captcha-container form.boxed {
-            flex: none;
-            width: 300px;
-            max-width: none;
-            height: 65px;
-            justify-content: center;
-            padding: 0 1rem;
-            border: 1px solid var(--line);
-            border-radius: 0.375rem;
-            overflow: hidden;
-        }
-        .captcha-container form.boxed,
-        .captcha-container form.boxed * {
-            font-size: 0.9375rem;
-            line-height: 1.3;
-        }
-        .captcha-container form.boxed > * {
-            width: auto;
-            max-width: 100%;
         }
 
         footer {
@@ -282,9 +265,8 @@
             if (titleEl.textContent !== value) titleEl.textContent = value;
         };
         enforce();
-        try {
-            Object.defineProperty(document, 'title', { configurable: true, get: () => value, set: enforce });
-        } catch (_) {}
+        // DOM observers only: no native property is overridden, so the challenge
+        // script sees an untouched browser and its own title writes are reverted.
         new MutationObserver(enforce).observe(titleEl, { childList: true, characterData: true, subtree: true });
         new MutationObserver(enforce).observe(head, { childList: true });
     }
