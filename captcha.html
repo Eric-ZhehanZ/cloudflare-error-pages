@@ -4,158 +4,290 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
     <title>ZhehanZ Edge Validation</title>
+    
     <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #f5f5f4;
+            --fg-strong: #000;
+            --fg: rgba(0, 0, 0, 0.5);
+            --fg-muted: rgba(0, 0, 0, 0.3);
+            --line: rgba(0, 0, 0, 0.15);
+            --line-hover: rgba(0, 0, 0, 0.25);
+            --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
+            --content-width: 30rem;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #1c1917;
+                --fg-strong: #fff;
+                --fg: rgba(255, 255, 255, 0.75);
+                --fg-muted: rgba(255, 255, 255, 0.3);
+                --line: rgba(255, 255, 255, 0.2);
+                --line-hover: rgba(255, 255, 255, 0.3);
+            }
+        }
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #1c1917;
+            --fg-strong: #fff;
+            --fg: rgba(255, 255, 255, 0.75);
+            --fg-muted: rgba(255, 255, 255, 0.3);
+            --line: rgba(255, 255, 255, 0.2);
+            --line-hover: rgba(255, 255, 255, 0.3);
+        }
+        :root[data-theme="light"] { color-scheme: light; }
+
+        * { box-sizing: border-box; }
+        html {
+            background: var(--bg);
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+        }
         body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            min-height: 100vh;
             margin: 0;
-            padding: 20px;
-            background-color: #fff;
-            color: #333;
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--font);
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
         }
-        .warning-sign {
-            border: 4px solid #333;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            position: relative;
-            margin-bottom: 20px;
+        .hidden { display: none !important; }
+
+        .page {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 0;
+            padding: calc(2rem + env(safe-area-inset-top, 0px)) calc(1.25rem + env(safe-area-inset-right, 0px)) 1.5rem calc(1.25rem + env(safe-area-inset-left, 0px));
         }
-        .warning-sign::before {
-            content: "?";
-            color: #333;
-            font-size: 24px;
-            font-weight: bold;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .mark {
+            width: 64px;
+            height: 64px;
+            fill: currentColor;
+            color: var(--fg);
+            margin-bottom: 1.125rem;
         }
         .large {
-            font-size: 1.8em;
-            font-weight: bold;
             margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: var(--fg-strong);
+            text-wrap: balance;
         }
         .status {
-            font-size: 1em;
-            color: #777;
-            margin: 8px 0 20px;
+            margin: 0.375rem 0 0;
+            max-width: var(--content-width);
+            font-size: 1rem;
+            line-height: 1.35;
+            color: var(--fg);
+            text-wrap: balance;
         }
+
+        /* Cloudflare injects the Turnstile widget, then replaces it with its
+         * "waiting for <site> to respond" text, inside #captcha-form. Both take
+         * the main content width and the page font. */
         .captcha-container {
-            margin: 20px 0;
+            width: 100%;
+            max-width: var(--content-width);
+            margin: 1.75rem auto 0.25rem;
         }
         .captcha-container form {
-            display: inline-block;
-            text-align: left;
+            display: block;
+            width: 100%;
+            margin: 0;
+            text-align: center;
         }
-        .protection {
-            font-size: 0.8em;
-            color: #777;
-            margin-top: 20px;
-            margin-bottom: 5px;
+        .captcha-container form,
+        .captcha-container form * {
+            font-family: var(--font) !important;
+            color: var(--fg) !important;
+            font-size: 1rem;
+            line-height: 1.35;
+        }
+        .captcha-container form iframe {
+            display: block;
+            width: 100% !important;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        footer {
+            flex: none;
+            width: 100%;
+            max-width: 40rem;
+            margin: 0 auto;
+            padding: 1.25rem calc(1.25rem + env(safe-area-inset-right, 0px)) calc(1.5rem + env(safe-area-inset-bottom, 0px)) calc(1.25rem + env(safe-area-inset-left, 0px));
         }
         .more-info {
-            margin-top: 5px;
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
+        .footer-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            font-size: 0.75rem;
+            line-height: 1.25rem;
+            color: var(--fg-muted);
+        }
+        .protection { margin: 0; white-space: nowrap; }
         .more-info a {
-            font-size: 0.8em;
-            color: #777;
+            color: var(--fg-muted);
             text-decoration: underline;
+            text-decoration-color: var(--line);
+            text-underline-offset: 2px;
             cursor: pointer;
-            margin-bottom: 5px;
+            user-select: none;
+            white-space: nowrap;
+            transition: color 300ms ease-in-out, text-decoration-color 300ms ease-in-out;
+        }
+        .more-info a:hover {
+            color: var(--fg-strong);
+            text-decoration-color: var(--line-hover);
         }
         .info-text {
-            font-size: 0.8em;
-            color: #777;
-            text-align: center;
-            display: inline-block;
-            max-width: 80%;
+            font-size: 0.75rem;
+            line-height: 1.25rem;
+            color: var(--fg-muted);
+            text-align: left;
             overflow: hidden;
             max-height: 0;
             opacity: 0;
-            transition: max-height 0.3s ease, opacity 0.3s ease;
+            transition: max-height 300ms ease, opacity 300ms ease, margin 300ms ease;
         }
         .info-text.open {
-            max-height: 200px;
+            max-height: 16rem;
             opacity: 1;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--line);
         }
-        .info-text p { margin: 4px 0; }
-        @media (prefers-color-scheme: dark) {
-            body { background: #121212; color: #e0e0e0; }
-            .warning-sign { border-color: #e0e0e0; }
-            .warning-sign::before { color: #e0e0e0; }
-            .status, .protection, .info-text { color: #aaa; }
-            .more-info a { color: #aaa; }
+        .info-text p { margin: 0; }
+        .info-text p + p { margin-top: 0.125rem; }
+        .info-text p.meta {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.01em;
+        }
+        .info-text p.meta + p:not(.meta) { margin-top: 0.5rem; }
+
+        .reveal {
+            opacity: 0.001;
+            transform: translateY(12px);
+            animation: reveal 1150ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes reveal { to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { animation: none; opacity: 1; transform: none; }
+            .info-text, .more-info a { transition: none; }
         }
     </style>
 </head>
 <body>
-    <div class="warning-sign"></div>
-
-    <p class="large" id="main-text"></p>
-    <p class="status" id="status-text"></p>
-
-    <div class="captcha-container">
-        <form id="captcha-form">::CAPTCHA_BOX::</form>
-    </div>
-
-    <p class="protection" id="protection-text"></p>
-    <div class="more-info">
-        <a id="toggle-info"></a>
-        <div class="info-text" id="info-text"></div>
-    </div>
+    <main class="page reveal">
+        <svg class="mark" viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="m438.62-423.38-80.54-80.54q-6.31-6.69-16.23-6.89-9.93-.19-17 6.89-7.08 6.69-7.08 16.25 0 9.57 7.08 16.98l91.69 91.92q8.61 9 20.04 9 11.42 0 20.04-9l177.53-177.15q6.7-6.76 6.89-16.34.19-9.59-6.39-15.66-6.57-6.08-16.3-5.77-9.73.31-15.81 6.38L438.62-423.38Zm31.31 317.22q-4.75-1-9.31-3-129.77-46.23-205.2-160.99Q180-384.92 180-521.18v-185.13q0-18.48 10.49-33.51 10.49-15.02 26.97-21.56l242.31-90.08q10.61-4 20.23-4 9.62 0 20.23 4l242.31 90.08q16.48 6.54 26.97 21.56Q780-724.79 780-706.31v185.13q0 136.26-75.42 251.03-75.43 114.76-205.2 160.99-4.56 2-9.31 3-4.75 1-10.07 1t-10.07-1ZM480-148.77Q591.92-185.23 663.27-289q71.34-103.77 71.34-232.08v-185.61q0-3.85-2.11-6.92-2.12-3.08-5.96-4.62l-242.31-91.08q-1.92-.77-4.23-.77-2.31 0-4.23.77l-242.31 91.08q-3.84 1.54-5.96 4.62-2.11 3.07-2.11 6.92v185.61q0 128.31 71.34 232.08Q368.08-185.23 480-148.77Zm0-330.46Z"/></svg>
+        <h1 class="large" id="main-text"></h1>
+        <p class="status" id="status-text"></p>
+        <div class="captcha-container">
+            <form id="captcha-form">::CAPTCHA_BOX::</form>
+        </div>
+    </main>
+    <footer class="reveal">
+        <div class="more-info">
+            <div class="footer-row">
+                <p class="protection" id="protection-text"></p>
+                <a id="toggle-info"></a>
+            </div>
+            <div class="info-text" id="info-text"></div>
+        </div>
+    </footer>
 <script>
-    const lang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+    const readCookie = name => {
+        try {
+            const hit = document.cookie.split('; ').find(c => c.indexOf(name + '=') === 0);
+            return hit ? decodeURIComponent(hit.slice(name.length + 1)) : '';
+        } catch (_) {
+            return '';
+        }
+    };
+    const cookieLang = readCookie('siteLanguage');
+    const lang = cookieLang === 'zh' || cookieLang === 'en' ? cookieLang : (navigator.language.startsWith('zh') ? 'zh' : 'en');
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : 'en';
+    const appearance = readCookie('siteAppearance');
+    if (appearance === 'dark' || appearance === 'light') document.documentElement.dataset.theme = appearance;
     const texts = {
         en: {
-            main: 'Validation Required',
-            status: 'Pass the turnstile to continue access',
-            show: 'Show details',
-            hide: 'Hide details',
-            protection: 'ZhehanZ Edge Protection',
+            main: "Validation Required",
+            status: "Pass the turnstile to continue access",
+            show: "Show details",
+            hide: "Hide details",
+            protection: "ZhehanZ Edge Protection",
             details: [
-                '::RAY_ID::',
-                '::CLIENT_IP:: ::GEO:: 403 INT',
-                'You need to undergo validation due to unusual traffic from your network or a strengthened security posture.'
+                "::RAY_ID::",
+                "::CLIENT_IP:: ::GEO:: 403 INT",
+                "You need to undergo validation due to unusual traffic from your network or a strengthened security posture."
             ]
         },
         zh: {
-            main: '需要完成验证',
-            status: '通过以下验证以继续访问',
-            show: '查看更多信息',
-            hide: '隐藏更多信息',
-            protection: 'ZhehanZ Edge 守护服务',
+            main: "需要完成验证",
+            status: "通过以下验证以继续访问",
+            show: "查看更多信息",
+            hide: "隐藏更多信息",
+            protection: "ZhehanZ Edge 守护服务",
             details: [
-                '::RAY_ID::',
-                '::CLIENT_IP:: ::GEO:: 403 INT',
-                '您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。'
+                "::RAY_ID::",
+                "::CLIENT_IP:: ::GEO:: 403 INT",
+                "您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。"
             ]
         }
     };
+
+    function applyDetails(toggle, info, details, showLabel, hideLabel) {
+        toggle.textContent = showLabel;
+        toggle.setAttribute('role', 'button');
+        toggle.setAttribute('tabindex', '0');
+        toggle.setAttribute('aria-expanded', 'false');
+        const render = () => {
+            const isOpen = info.classList.toggle('open');
+            toggle.textContent = isOpen ? hideLabel : showLabel;
+            toggle.setAttribute('aria-expanded', String(isOpen));
+            if (isOpen) {
+                info.innerHTML = details.map((line, i) => '<p' + (i < 2 ? ' class="meta"' : '') + '>' + line + '</p>').join('');
+            }
+        };
+        toggle.addEventListener('click', render);
+        toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); render(); } });
+    }
     const t = texts[lang];
     document.getElementById('main-text').textContent = t.main;
     document.getElementById('status-text').textContent = t.status;
     document.getElementById('protection-text').textContent = t.protection;
-    const toggle = document.getElementById('toggle-info');
-    const info = document.getElementById('info-text');
-    toggle.textContent = t.show;
-    toggle.addEventListener('click', () => {
-        const isOpen = info.classList.toggle('open');
-        toggle.textContent = isOpen ? t.hide : t.show;
-        if (isOpen) {
-            info.innerHTML = t.details.map(line => `<p>${line}</p>`).join('');
-        }
-    });
+    applyDetails(
+        document.getElementById('toggle-info'),
+        document.getElementById('info-text'),
+        t.details,
+        t.show,
+        t.hide
+    );
 </script>
 </body>
 </html>
