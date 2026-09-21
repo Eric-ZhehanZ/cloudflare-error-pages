@@ -366,7 +366,7 @@
         }
     };
 
-    const refreshSeconds = 12;
+    const refreshSeconds = 60; // safety net only: Cloudflare reloads on its own once the check completes
     const captchaView = document.getElementById('captcha-view');
     const attackView = document.getElementById('attack-view');
     const captchaShell = document.getElementById('captcha-form');
