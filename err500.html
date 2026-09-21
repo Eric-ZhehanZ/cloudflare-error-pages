@@ -275,28 +275,132 @@
         en: {
             title: "Error • ZhehanZ Edge",
             main: "Service Unavailable",
-            status: "You are connected, but the server is currently on a break",
+            status: "You are connected, but the server is not responding properly",
             show: "Show details",
             hide: "Hide details",
             protection: "ZhehanZ Edge Protection",
             details: [
                 "::RAY_ID::",
                 "::CLIENT_IP:: ::GEO:: 500",
-                "Your connection is fine. The service is either temporarily down for maintainence purposes, or experiencing some connection issues between entry nodes and the origin. This issue will most likely resolve itself soon."
-            ]
+                "Your connection is fine. The service is either down for maintenance, or the edge network cannot get a proper response from the origin server. This usually resolves itself within minutes."
+            ],
+            sep: " ",
+            action: "Wait a minute and reload the page. If it keeps happening, the site owner has most likely already been alerted and is working on it.",
+            byStatus: {
+                500: {
+                    status: "The server ran into an internal error",
+                    detail: "Your connection is fine. The origin server hit an unexpected error while handling this request, so there was nothing to send back."
+                },
+                502: {
+                    status: "The server sent back an invalid response",
+                    detail: "Your connection is fine. The origin server answered, but its response could not be understood. It may be restarting, overloaded or misconfigured."
+                },
+                503: {
+                    status: "The server is temporarily unable to handle requests",
+                    detail: "Your connection is fine. The origin server is deliberately refusing requests for now, usually because of maintenance or heavy load."
+                },
+                504: {
+                    status: "The server took too long to respond",
+                    detail: "Your connection is fine. The origin server accepted the request but did not finish answering in time."
+                },
+                520: {
+                    status: "The server returned an unexpected response",
+                    detail: "Your connection is fine. The origin server sent back something empty, malformed or otherwise unexpected, so it could not be passed on to you."
+                },
+                521: {
+                    status: "The server is refusing connections",
+                    detail: "Your connection is fine. The origin server is not accepting connections from the edge network; it is probably switched off or blocking edge traffic."
+                },
+                522: {
+                    status: "The connection to the server timed out",
+                    detail: "Your connection is fine. The edge network could not establish a connection to the origin server in time. The server may be down or overloaded."
+                },
+                523: {
+                    status: "The server cannot be reached",
+                    detail: "Your connection is fine. The edge network has no route to the origin server. Its address may have changed, or its network is down."
+                },
+                524: {
+                    status: "The server did not finish responding in time",
+                    detail: "Your connection is fine. A connection was made, but the origin server took too long to complete its response. It is probably busy with a slow request."
+                },
+                525: {
+                    status: "The secure connection to the server failed",
+                    detail: "Your connection is fine. The TLS handshake between the edge network and the origin server failed, which points to a certificate or configuration problem on the server."
+                },
+                526: {
+                    status: "The server presented an invalid certificate",
+                    detail: "Your connection is fine. The origin server offered a TLS certificate that could not be trusted, so the secure connection was refused."
+                },
+                530: {
+                    status: "The server address could not be resolved",
+                    detail: "Your connection is fine. The edge network could not look up where the origin server lives, which means a DNS or tunnel misconfiguration on the site."
+                }
+            }
         },
         zh: {
             title: "错误 • ZhehanZ Edge",
             main: "服务暂不可用",
-            status: "您已连接，但服务器当前正在维护中",
+            status: "您已连接，但服务器未能正常响应",
             show: "查看更多信息",
             hide: "隐藏更多信息",
             protection: "ZhehanZ Edge 守护服务",
             details: [
                 "::RAY_ID::",
                 "::CLIENT_IP:: ::GEO:: 500",
-                "您的网络连接正常。此服务可能正暂时停机维护中，或在入口端点与源服务器之间出现连接问题。该问题一般会很快自行修复。"
-            ]
+                "您的网络连接正常。此服务可能正在停机维护，或边缘网络无法从源服务器获得正常响应。该问题通常会在几分钟内自行恢复。"
+            ],
+            sep: "",
+            action: "请稍候一分钟后刷新页面。如果问题持续出现，站点所有者通常已收到通知并正在处理。",
+            byStatus: {
+                500: {
+                    status: "服务器发生内部错误",
+                    detail: "您的网络连接正常。源服务器在处理此请求时发生了意外错误，因此没有内容可以返回。"
+                },
+                502: {
+                    status: "服务器返回了无效的响应",
+                    detail: "您的网络连接正常。源服务器有响应，但内容无法被识别，可能正在重启、负载过高或配置有误。"
+                },
+                503: {
+                    status: "服务器暂时无法处理请求",
+                    detail: "您的网络连接正常。源服务器目前主动拒绝请求，通常是由于维护或负载过高。"
+                },
+                504: {
+                    status: "服务器响应超时",
+                    detail: "您的网络连接正常。源服务器接受了请求，但未能及时完成响应。"
+                },
+                520: {
+                    status: "服务器返回了意外的响应",
+                    detail: "您的网络连接正常。源服务器返回了空白、格式错误或其他意外的内容，无法转交给您。"
+                },
+                521: {
+                    status: "服务器拒绝连接",
+                    detail: "您的网络连接正常。源服务器不接受来自边缘网络的连接，可能已关闭或屏蔽了边缘流量。"
+                },
+                522: {
+                    status: "与服务器的连接超时",
+                    detail: "您的网络连接正常。边缘网络未能及时与源服务器建立连接，服务器可能已关闭或负载过高。"
+                },
+                523: {
+                    status: "无法访问服务器",
+                    detail: "您的网络连接正常。边缘网络找不到通往源服务器的路由，其地址可能已更改，或其网络已中断。"
+                },
+                524: {
+                    status: "服务器未能及时完成响应",
+                    detail: "您的网络连接正常。连接已建立，但源服务器花费了过长时间仍未完成响应，可能正被缓慢的请求占用。"
+                },
+                525: {
+                    status: "与服务器的安全连接失败",
+                    detail: "您的网络连接正常。边缘网络与源服务器之间的 TLS 握手失败，通常表示服务器的证书或配置存在问题。"
+                },
+                526: {
+                    status: "服务器提供的证书无效",
+                    detail: "您的网络连接正常。源服务器提供的 TLS 证书不受信任，因此安全连接被拒绝。"
+                },
+                530: {
+                    status: "无法解析服务器地址",
+                    detail: "您的网络连接正常。边缘网络无法查询到源服务器的位置，说明站点的 DNS 或隧道配置有误。"
+                }
+            }
         }
     };
 
@@ -317,6 +421,25 @@
         toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); render(); } });
     }
     const t = texts[lang];
+
+    function responseStatus() {
+        try {
+            const nav = performance.getEntriesByType('navigation')[0];
+            const code = nav && nav.responseStatus;
+            return typeof code === 'number' && code > 0 ? code : null;
+        } catch (_) {
+            return null;
+        }
+    }
+    // Specific wording per HTTP status; anything unlisted keeps the stock text.
+    const code = responseStatus();
+    const specific = code !== null && t.byStatus[code] ? t.byStatus[code] : null;
+    if (specific) {
+        t.status = specific.status;
+        t.details = [t.details[0], t.details[1].replace(/\d+$/, String(code)), specific.detail + t.sep + t.action];
+    } else {
+        t.details = [t.details[0], t.details[1], t.details[2] + t.sep + t.action];
+    }
     lockTitle(t.title);
     document.getElementById('main-text').textContent = t.main;
     document.getElementById('status-text').textContent = t.status;

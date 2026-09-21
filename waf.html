@@ -274,27 +274,27 @@
         en: {
             title: "Error • ZhehanZ Edge",
             main: "Access Denied",
-            status: "Your are blocked from this service",
+            status: "Your request was blocked by a security rule",
             show: "Show details",
             hide: "Hide details",
             protection: "ZhehanZ Edge Protection",
             details: [
                 "::RAY_ID::",
                 "::CLIENT_IP:: ::GEO:: WAF",
-                "Your connection is fine. The service denied you access since your request does not meet the security requirements of this service based on various indicators."
+                "Your connection is fine. Something about this request — where it came from, how it was made, or what it contained — matched a security rule, so it was stopped before reaching the site. Reloading rarely helps. If you believe this is a mistake, contact the site owner and quote the Ray ID above."
             ]
         },
         zh: {
             title: "错误 • ZhehanZ Edge",
             main: "访问被拒绝",
-            status: "您无法访问本服务",
+            status: "您的请求被安全规则拦截",
             show: "查看更多信息",
             hide: "隐藏更多信息",
             protection: "ZhehanZ Edge 守护服务",
             details: [
                 "::RAY_ID::",
                 "::CLIENT_IP:: ::GEO:: WAF",
-                "您的网络连接正常。基于多项指标评估，暂无法确认您的请求满足本服务的安全条件，因此您的请求被拒绝。"
+                "您的网络连接正常。此请求的某些特征——来源、方式或内容——触发了安全规则，因此在到达站点之前被拦截。刷新页面通常无济于事。如果您认为这是误判，请联系站点所有者，并附上上方的 Ray ID。"
             ]
         }
     };

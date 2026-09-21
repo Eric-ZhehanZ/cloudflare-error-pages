@@ -316,20 +316,21 @@
                 details: [
                     "::RAY_ID::",
                     "::CLIENT_IP:: ::GEO:: AUTO-INT",
-                    "You need to undergo validation due to unusual traffic from your network or a strengthened security posture."
+                    "You need to undergo validation due to unusual traffic from your network or a strengthened security posture. Tick the box above; most checks finish within a few seconds and you will be taken straight to the page. If the check fails, reload the page and try again."
                 ]
             },
             attack: {
                 main: "One Moment Please",
                 status1: "Checking your device and network",
-                status2: "Check complete — Proceeding",
+                status2: "Still checking — this usually takes a few seconds",
+                status3: "This is taking longer than usual. Reload the page or try again in a moment",
                 show: "Show details",
                 hide: "Hide details",
                 protection: "ZhehanZ Edge Protection",
                 details: [
                     "::RAY_ID::",
                     "::CLIENT_IP:: ::GEO:: AUTO-NON",
-                    "You need to undergo validation due to unusual traffic from your network or a strengthened security posture."
+                    "An automatic check is confirming that your browser and network look legitimate; nothing is needed from you. The page continues on its own once the check completes. If nothing happens within about half a minute, reload the page."
                 ]
             }
         },
@@ -344,20 +345,21 @@
                 details: [
                     "::RAY_ID::",
                     "::CLIENT_IP:: ::GEO:: 403 AUTO-INT",
-                    "您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。"
+                    "您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。请勾选上方的方框，大多数验证会在几秒内完成，随后将直接进入页面。如果验证失败，请刷新页面重试。"
                 ]
             },
             attack: {
                 main: "请等候验证",
                 status1: "正在自动检查设备及网络",
-                status2: "检查完成 — 即将继续访问",
+                status2: "仍在检查中 — 通常只需几秒钟",
+                status3: "本次检查耗时较长，请刷新页面或稍后再试",
                 show: "查看更多信息",
                 hide: "隐藏更多信息",
                 protection: "ZhehanZ Edge 守护服务",
                 details: [
                     "::RAY_ID::",
                     "::CLIENT_IP:: ::GEO:: 403 AUTO-NON",
-                    "您需要完成此验证过程，可能是因为您的网络流量异常，或者目标服务的安全级别较高。"
+                    "系统正在自动确认您的浏览器和网络是否正常，无需您进行任何操作。检查完成后页面会自动继续。如果约半分钟后仍无变化，请刷新页面。"
                 ]
             }
         }
@@ -463,11 +465,17 @@
             t.hide
         );
 
+        // Neutral progress wording after a few seconds; a nudge to retry if still here.
         window.setTimeout(() => {
             if (state.mode === 'attack') {
                 statusEl.textContent = t.status2;
             }
-        }, 5000);
+        }, 6000);
+        window.setTimeout(() => {
+            if (state.mode === 'attack') {
+                statusEl.textContent = t.status3;
+            }
+        }, 20000);
     }
 
     function watchForPlaceholderChanges() {

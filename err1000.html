@@ -275,28 +275,84 @@
         en: {
             title: "Error • ZhehanZ Edge",
             main: "Service Unavailable",
-            status: "You are connected, but the server is currently unavailable",
+            status: "You are connected, but the site cannot be served right now",
             show: "Show details",
             hide: "Hide details",
             protection: "ZhehanZ Edge Protection",
             details: [
                 "::RAY_ID::",
                 "::CLIENT_IP:: ::GEO:: 1000",
-                "Your connection is fine. The service is either temporarily down for maintainence purposes, or experiencing some configuration issues. This issue will most likely resolve itself soon."
-            ]
+                "Your connection is fine. The site is either down for maintenance, or a configuration problem on the site is stopping the edge network from serving it. This usually resolves itself soon."
+            ],
+            sep: " ",
+            action: "Reload the page in a minute. If it keeps happening, the site owner needs to correct the configuration; quote the Ray ID above when reporting it.",
+            byStatus: {
+                403: {
+                    status: "Access to this site is denied by its configuration",
+                    detail: "Your connection is fine. A rule on the site turned this request away, most often a blocked address, direct access by IP instead of the domain name, or a firewall rule."
+                },
+                409: {
+                    status: "The requested hostname does not match the site",
+                    detail: "Your connection is fine. The name you asked for does not line up with how the site is configured, for example a mismatch between the address and its certificate, or a DNS record that cannot be resolved."
+                },
+                429: {
+                    status: "Too many requests were sent in a short time",
+                    detail: "Your connection is fine. The site limits how many requests one address may make within a short period. The limit lifts automatically after a short wait."
+                },
+                500: {
+                    status: "A script serving this site failed",
+                    detail: "Your connection is fine. Code that runs on the edge for this site threw an error or exceeded its limits before it could produce a page."
+                },
+                502: {
+                    status: "The site points to an address it cannot use",
+                    detail: "Your connection is fine. The site’s DNS is set to an address that the edge network is not allowed to serve, which the site owner needs to correct."
+                },
+                530: {
+                    status: "The server address could not be resolved",
+                    detail: "Your connection is fine. The edge network could not find the origin server: its DNS record does not resolve, or its tunnel is not connected."
+                }
+            }
         },
         zh: {
             title: "错误 • ZhehanZ Edge",
             main: "服务暂不可用",
-            status: "您已连接，但原始服务器当前无法访问",
+            status: "您已连接，但站点目前无法提供服务",
             show: "查看更多信息",
             hide: "隐藏更多信息",
             protection: "ZhehanZ Edge 守护服务",
             details: [
                 "::RAY_ID::",
                 "::CLIENT_IP:: ::GEO:: 1000",
-                "您的网络连接正常。此服务可能正暂时停机维护中，或存在部分配置问题。该问题一般会很快自行修复。"
-            ]
+                "您的网络连接正常。此站点可能正在停机维护，或站点的配置问题导致边缘网络无法提供服务。该问题通常会很快自行恢复。"
+            ],
+            sep: "",
+            action: "请稍候一分钟后刷新页面。如果问题持续出现，需要由站点所有者修正配置；反馈时请附上上方的 Ray ID。",
+            byStatus: {
+                403: {
+                    status: "站点的配置拒绝了此次访问",
+                    detail: "您的网络连接正常。站点上的某条规则拒绝了此请求，常见原因是地址被屏蔽、使用 IP 而非域名直接访问，或触发了防火墙规则。"
+                },
+                409: {
+                    status: "请求的主机名与站点不匹配",
+                    detail: "您的网络连接正常。您请求的名称与站点的配置不一致，例如地址与证书不匹配，或 DNS 记录无法解析。"
+                },
+                429: {
+                    status: "短时间内发送了过多请求",
+                    detail: "您的网络连接正常。站点限制了单个地址在短时间内的请求次数，稍候片刻后限制会自动解除。"
+                },
+                500: {
+                    status: "为站点提供服务的脚本出错",
+                    detail: "您的网络连接正常。在边缘网络上为此站点运行的代码抛出了错误或超出了资源限制，未能生成页面。"
+                },
+                502: {
+                    status: "站点指向了一个无法使用的地址",
+                    detail: "您的网络连接正常。站点的 DNS 指向了边缘网络不允许提供服务的地址，需要由站点所有者修正。"
+                },
+                530: {
+                    status: "无法解析服务器地址",
+                    detail: "您的网络连接正常。边缘网络找不到源服务器：其 DNS 记录无法解析，或其隧道未连接。"
+                }
+            }
         }
     };
 
@@ -317,6 +373,25 @@
         toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); render(); } });
     }
     const t = texts[lang];
+
+    function responseStatus() {
+        try {
+            const nav = performance.getEntriesByType('navigation')[0];
+            const code = nav && nav.responseStatus;
+            return typeof code === 'number' && code > 0 ? code : null;
+        } catch (_) {
+            return null;
+        }
+    }
+    // Specific wording per HTTP status; anything unlisted keeps the stock text.
+    const code = responseStatus();
+    const specific = code !== null && t.byStatus[code] ? t.byStatus[code] : null;
+    if (specific) {
+        t.status = specific.status;
+        t.details = [t.details[0], t.details[1].replace(/\d+$/, String(code)), specific.detail + t.sep + t.action];
+    } else {
+        t.details = [t.details[0], t.details[1], t.details[2] + t.sep + t.action];
+    }
     lockTitle(t.title);
     document.getElementById('main-text').textContent = t.main;
     document.getElementById('status-text').textContent = t.status;
