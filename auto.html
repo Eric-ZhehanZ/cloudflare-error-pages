@@ -115,34 +115,31 @@
             max-width: var(--content-width);
             margin: 1.75rem auto 0.25rem;
         }
-        /* A permanent rounded box, sized for the 300 x 65 Turnstile widget plus
-         * a 6px margin all round. The widget renders inside it; when Cloudflare
-         * swaps the widget for its "waiting for <site> to respond" text, the
-         * text takes the same box. Fixed size, so the layout never shifts.
-         * Content is anchored to the bottom edge: Cloudflare's wrapper carries
-         * a few pixels of empty space above the widget, which then overflows
-         * upward out of sight instead of pushing the widget down. */
+        /* The challenge form is a fixed 300 x 65 slot, the Turnstile widget's
+         * size, laid out before anything is injected. Whatever Cloudflare plugs
+         * in (the widget, then its "waiting for <site> to respond" text) sits
+         * centred inside it, so no other element ever moves. The text takes the
+         * footer's small muted style and is limited to the slot's width. */
         .captcha-container form {
             flex: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end;
-            width: 314px;
+            justify-content: center;
+            width: 300px;
             max-width: 100%;
-            height: 79px;
+            height: 65px;
             margin: 0;
-            padding: 6px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
+            padding: 0;
+            border: 0;
             text-align: center;
         }
         .captcha-container form,
         .captcha-container form * {
             font-family: var(--font) !important;
-            color: var(--fg) !important;
-            font-size: 0.9375rem;
-            line-height: 1.3;
+            color: var(--fg-muted) !important;
+            font-size: 0.75rem;
+            line-height: 1.25rem;
             vertical-align: top; /* no descender gap under Cloudflare's inline-block wrapper */
         }
         .captcha-container form > * {
@@ -366,15 +363,12 @@
         }
     };
 
-    const refreshSeconds = 60; // safety net only: Cloudflare reloads on its own once the check completes
     const captchaView = document.getElementById('captcha-view');
     const attackView = document.getElementById('attack-view');
     const captchaShell = document.getElementById('captcha-form');
     const attackShell = document.getElementById('attack-box-shell');
     const state = {
-        mode: null,
-        countdownId: null,
-        refreshId: null
+        mode: null
     };
 
     function applyDetails(toggle, info, details, showLabel, hideLabel) {
@@ -417,25 +411,6 @@
         return !isPlaceholderText(text);
     }
 
-    function stopAttackCountdown() {
-        if (state.countdownId !== null) {
-            window.clearInterval(state.countdownId);
-            state.countdownId = null;
-        }
-        if (state.refreshId !== null) {
-            window.clearTimeout(state.refreshId);
-            state.refreshId = null;
-        }
-    }
-
-    function startAttackCountdown() {
-        stopAttackCountdown();
-
-        state.refreshId = window.setTimeout(() => {
-            window.location.reload();
-        }, refreshSeconds * 1000);
-    }
-
     function setMode(mode) {
         if (state.mode === mode) {
             return;
@@ -444,12 +419,6 @@
         state.mode = mode;
         captchaView.classList.toggle('hidden', mode !== 'captcha');
         attackView.classList.toggle('hidden', mode !== 'attack');
-
-        if (mode === 'attack') {
-            startAttackCountdown();
-        } else {
-            stopAttackCountdown();
-        }
     }
 
     function updateMode() {
