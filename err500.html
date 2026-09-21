@@ -116,22 +116,25 @@
             margin: 1.75rem auto 0.25rem;
         }
         /* A permanent rounded box, sized for the 300 x 65 Turnstile widget plus
-         * a 12px margin all round. The widget renders inside it; when Cloudflare
+         * a 6px margin all round. The widget renders inside it; when Cloudflare
          * swaps the widget for its "waiting for <site> to respond" text, the
-         * text takes the same box. Fixed size, so the layout never shifts. */
+         * text takes the same box. Fixed size, so the layout never shifts.
+         * Content is anchored to the bottom edge: Cloudflare's wrapper carries
+         * a few pixels of empty space above the widget, which then overflows
+         * upward out of sight instead of pushing the widget down. */
         .captcha-container form {
             flex: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            width: 324px;
+            justify-content: flex-end;
+            width: 314px;
             max-width: 100%;
-            height: 89px;
+            height: 79px;
             margin: 0;
-            padding: 12px;
+            padding: 6px;
             border: 1px solid var(--line);
-            border-radius: 0.5rem;
+            border-radius: 8px;
             text-align: center;
         }
         .captcha-container form,
