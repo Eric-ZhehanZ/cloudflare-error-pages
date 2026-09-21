@@ -115,31 +115,34 @@
             max-width: var(--content-width);
             margin: 1.75rem auto 0.25rem;
         }
-        /* The challenge form is a fixed 300 x 65 slot, the Turnstile widget's
-         * size, laid out before anything is injected. Whatever Cloudflare plugs
-         * in (the widget, then its "waiting for <site> to respond" text) sits
-         * centred inside it, so no other element ever moves. The text takes the
-         * footer's small muted style and is limited to the slot's width. */
+        /* A permanent rounded box, sized for the 300 x 65 Turnstile widget plus
+         * a 6px margin all round. The widget renders inside it; when Cloudflare
+         * swaps the widget for its "waiting for <site> to respond" text, the
+         * text takes the same box. Fixed size, so the layout never shifts.
+         * Content is anchored to the bottom edge: Cloudflare's wrapper carries
+         * a few pixels of empty space above the widget, which then overflows
+         * upward out of sight instead of pushing the widget down. */
         .captcha-container form {
             flex: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            width: 300px;
+            justify-content: flex-end;
+            width: 314px;
             max-width: 100%;
-            height: 65px;
+            height: 79px;
             margin: 0;
-            padding: 0;
-            border: 0;
+            padding: 6px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
             text-align: center;
         }
         .captcha-container form,
         .captcha-container form * {
             font-family: var(--font) !important;
-            color: var(--fg-muted) !important;
-            font-size: 0.75rem;
-            line-height: 1.25rem;
+            color: var(--fg) !important;
+            font-size: 0.9375rem;
+            line-height: 1.3;
             vertical-align: top; /* no descender gap under Cloudflare's inline-block wrapper */
         }
         .captcha-container form > * {
