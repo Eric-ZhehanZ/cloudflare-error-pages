@@ -137,8 +137,9 @@
         }
         .captcha-container form > * {
             flex: none;
-            margin-left: auto;
-            margin-right: auto;
+            width: max-content;
+            max-width: none;
+            margin: 0;
         }
         .captcha-container form iframe {
             display: block;
@@ -164,7 +165,8 @@
             line-height: 1.3;
         }
         .captcha-container form.boxed > * {
-            margin: 0 auto;
+            width: auto;
+            max-width: 100%;
         }
 
         footer {
@@ -348,16 +350,26 @@
     );
 
     function watchChallengeBox(form) {
-        const update = () => {
-            const iframe = form.querySelector('iframe');
-            const showsWidget = !!iframe && iframe.offsetWidth > 0 && iframe.offsetHeight > 0;
-            const text = form.textContent.trim();
-            const hasContent = form.querySelector('*') !== null || (text !== '' && !/^::[A-Z0-9_]+::$/.test(text));
-            const boxed = hasContent && !showsWidget;
+        // Turnstile renders its iframe inside a closed shadow root, so the widget
+        // cannot be found by querying for an iframe. Its host element still lays
+        // out at the widget's size, so the rendered box tells the two states apart:
+        // widget showing (a child at least ~50px tall) vs Cloudflare's waiting text.
+        const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(() => update()) : null;
+        function update() {
+            const els = Array.from(form.querySelectorAll('*'));
+            if (resize) els.forEach(el => resize.observe(el));
+            const text = (form.innerText || form.textContent).trim();
+            const hasText = text !== '' && !/^::[A-Z0-9_]+::$/.test(text);
+            const showsWidget = els.some(el => {
+                const r = el.getBoundingClientRect();
+                return r.height >= 50 && r.width >= 150;
+            });
+            const boxed = hasText && !showsWidget;
             if (form.classList.contains('boxed') !== boxed) form.classList.toggle('boxed', boxed);
-        };
+        }
         update();
         new MutationObserver(update).observe(form, { childList: true, subtree: true, attributes: true, characterData: true });
+        window.setInterval(update, 500);
     }
     watchChallengeBox(document.getElementById('captcha-form'));
 </script>
